@@ -1,0 +1,76 @@
+<% var title = 'Consultation du profile' %>
+<% include head %>
+
+<div class="container">
+	<form role="form" class="form-horizontal" action="/updateProfile" method="POST">
+		<h2>Votre profile <%= email%></h2>
+		<div  style="margin-top: 1%" class="form-group">
+			<label class="control-label col-sm-2" for="email">E-mail :</label>
+			<div class="col-sm-10">
+				<input type="email" style="width:30%" class="form-control" value="<%= email %>" name="email" id="email" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="nom">Nom :</label>
+			<div class="col-sm-10">
+				<input class="form-control" style="width:30%" type="text" value="<%= nom %>" name="nom" id="nom"/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="prenom">Prenom :</label>
+			<div class="col-sm-10">
+				<input class="form-control" type="text" value="<%= prenom %>" style="width:30%" name="prenom" id="prenom"/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="telephone">Téléphone :</label>
+			<div class="col-sm-10">
+				<input class="form-control" style="width:30%" value="<%= tel %>" type="tel" name="telephone" id="telephone"/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="siteweb">Site Web :</label>
+			<div class="col-sm-10">
+				<input class="form-control" style="width:30%" value="<%= siteweb %>" type="url" name="siteweb" id="siteweb"/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="birthdate">Date de naissance :</label>
+			<div class="col-sm-10">
+				<input class="form-control" style="width:30%" type="date" value="<%= birthdate %>" name="birthdate" id="birthdate"/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="ville">Ville :</label>
+			<div class="col-sm-10">
+				<input class="form-control" style="width:30%" value="<%= ville %>" type="text" name="ville" id="ville"/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="taille">Taille :</label>
+			<div class="col-sm-10">
+				<input class="form-control" style="width:30%" type="range" value="<%= taille %>" name="taille" id="taille" min="0" max="250" step="1"/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="couleur">Couleur Pr&eacute;f&eacute;r&eacute;e :</label>
+			<div class="col-sm-10">
+				<input class="form-control" style="width:30%" type="color" name="couleur" id="couleur" value="<%= couleur %>"/>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<input type="submit" class="btn btn-default" value="Modifier mes information">
+			</div>
+		</div>
+	</form>
+	<form role="form" action="/deleteProfile" method="POST">>
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<input type="submit" class="btn btn-danger" value="Supprimer mon compte">
+			</div>
+		</div>
+	</form>
+</div>
+
+<% include foot %>

@@ -1,0 +1,23 @@
+<% var title = 'Formulaire login' %>
+<% include head %>
+
+<h1>Login</h1>
+Accés au <a href="/profile">/profil</a>
+<form method="post" action="/login">
+  <p>
+    <label>Username:</label>
+    <input type="text" class="form-control" style="width:20%" required name="username">
+  </p>
+  <p>
+    <label>Password:</label>
+    <input type="text" class="form-control" style="width:20%" required name="password">
+  </p>
+  <p>
+    <input type="submit" class="btn btn-default" value="Login">
+  </p>
+</form>
+
+<a href="/register">Register Now</a>
+<!--Accés au <a href="/register">/register</a>-->
+
+<% include foot %>
