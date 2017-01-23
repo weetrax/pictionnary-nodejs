@@ -109,7 +109,7 @@ app.post('/deleteProfile', function (req, res) {
         connection.query("delete from users where id = " + session.id, function (err, rows, fields) {
             if (!err) {
                 res.render('message', { messageError: "Votre compte à bien été supprimé.", messageTitle: "Succès" });
-                session.open = false;
+                req.session.destroy();
             }
             else {
                 res.render('message', { messageError: "Impossible de supprimer votre compte pour le moment. Veuillez re-essayer plus tard.", messageTitle: "Oops, une erreur est survenue" });
@@ -173,7 +173,7 @@ app.post('/updateProfile', function (req, res) {
 app.get('/logout', function (req, res) {
 
     if (session.open) {
-        session.open = false;
+        req.session.destroy();
         res.redirect('/login');
     }
 });
