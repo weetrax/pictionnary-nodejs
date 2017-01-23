@@ -28,7 +28,6 @@ var connection = mysql.createConnection({
 
 app.get('/', function(req, res){
     res.redirect('/login');
-
 });
 
 app.get('/login', function (req, res) {
@@ -50,6 +49,7 @@ app.post('/login', function (req, res) {
               if (rows[0].email == username && rows[0].password == password) {
                   logger.info('Resultat de la requete: ', rows);
                   session.open = true;
+                  //declaration des variables de sessions
                   session.id = rows[0].id;
                   session.email = rows[0].email;
                   session.nom = rows[0].nom;
@@ -102,14 +102,13 @@ app.get('/profile', function (req, res) {
     else res.redirect('/login');
 });
 
-
 //delete l'utilisateur courant
 app.post('/deleteProfile', function (req, res) {
     if (session.open) {
         connection.query("delete from users where id = " + session.id, function (err, rows, fields) {
             if (!err) {
                 res.render('message', { messageError: "Votre compte à bien été supprimé.", messageTitle: "Succès" });
-                req.session.destroy();
+                session.open = false;
             }
             else {
                 res.render('message', { messageError: "Impossible de supprimer votre compte pour le moment. Veuillez re-essayer plus tard.", messageTitle: "Oops, une erreur est survenue" });
@@ -126,7 +125,6 @@ app.get('/register', function (req, res) {
 app.post('/updateProfile', function (req, res) {
     if (session.open) {
         var email = req.body.email;
-        //var password = req.body.password;
         var id = session.id;
         var nom = req.body.nom;
         var prenom = req.body.prenom;
@@ -146,6 +144,7 @@ app.post('/updateProfile', function (req, res) {
                     connection.query("UPDATE users SET email = '" + email + "', nom = '" + nom + "', prenom = '" + prenom + "', tel = '" + telephone + "', website = '" + siteweb + "', birthdate = '" + birthdate + "', ville = '" + ville + "', taille = '" + taille + "', couleur = '" + couleur + "' where id = " + id, function (err, rows, fields) {
                         if (!err) {
                             res.render('message', { messageError: "Votre compte à bien été modifier.", messageTitle: "Succès" });
+                            session.email = email;
                             session.nom = nom;
                             session.prenom = prenom;
                             session.tel = telephone;
@@ -169,20 +168,18 @@ app.post('/updateProfile', function (req, res) {
 
     }
 });
-
+//logout
 app.get('/logout', function (req, res) {
-
     if (session.open) {
-        req.session.destroy();
+        session.open = false;
         res.redirect('/login');
     }
 });
 
-
 //enregistre une personne dans la base de données
 app.post('/register', function (req, res) {
 
-    //recuperation des variables de la methode post du formulaire /register
+    //recuperation des variables de la methode post du formulaire
     var email = req.body.email;
     var password = req.body.password;
     var nom = req.body.nom;
@@ -200,8 +197,7 @@ app.post('/register', function (req, res) {
     connection.query("INSERT INTO `users`(`id`, `email`, `password`, `nom`, `prenom`, `tel`, `website`, `sexe`, `birthdate`, `ville`, `taille`, `couleur`, `profilepic`) VALUES (null, '" + email + "', '" + password + "','" + nom + "','" + prenom + "','" + telephone + "','" + siteweb + "','" + sexe + "','" + birthdate + "','" + ville + "','" + taille + "','" + couleur + "','" + profilepicfile + "')", function (err, rows, fields) {
         if (!err) {
             logger.info(rows);
-            res.redirect('/profile');
-            session.open = true;
+            res.render('message', { messageError: "Votre compte à bien été créé.", messageTitle: "Succès" });
         }
         else {
             logger.error(err);

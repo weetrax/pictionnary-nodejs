@@ -3,7 +3,7 @@
 
 <div class="container">
 	<form role="form" class="form-horizontal" action="/updateProfile" method="POST">
-		<h2>Votre profile <%= email%></h2>
+		<h2>Bienvenue sur votre profile <%= nom%> <%=prenom%></h2>
 		<div  style="margin-top: 1%" class="form-group">
 			<label class="control-label col-sm-2" for="email">E-mail :</label>
 			<div class="col-sm-10">
@@ -34,12 +34,7 @@
 				<input class="form-control" style="width:30%" value="<%= siteweb %>" type="url" name="siteweb" id="siteweb"/>
 			</div>
 		</div>
-		<div class="form-group">
-			<label class="control-label col-sm-2" for="birthdate">Date de naissance :</label>
-			<div class="col-sm-10">
-				<input class="form-control" style="width:30%" type="date" value="<%= birthdate %>" name="birthdate" id="birthdate"/>
-			</div>
-		</div>
+
 		<div class="form-group">
 			<label class="control-label col-sm-2" for="ville">Ville :</label>
 			<div class="col-sm-10">
@@ -76,7 +71,11 @@
 			</div>
 		</div>
 	</form>
-	Se <a href="/logout">Logout</a>
+	<div class="row">
+		<div class="col-md-2">
+			<a href="/logout">Se déconnecter</a>
+		</div>
+	</div>
 </div>
 
 <% include foot %>
