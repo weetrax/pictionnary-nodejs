@@ -31,8 +31,11 @@ app.get('/', function(req, res){
 
 });
 
-app.get('/login', function(req, res){
-    res.render('login');
+app.get('/login', function (req, res) {
+    if (session.open == true) {
+        res.redirect('/profile');
+    }
+    else res.render('login');
 });
 
 app.post('/login', function (req, res) {
@@ -120,6 +123,61 @@ app.get('/register', function (req, res) {
     res.render('register');
 });
 
+app.post('/updateProfile', function (req, res) {
+    if (session.open) {
+        var email = req.body.email;
+        //var password = req.body.password;
+        var id = session.id;
+        var nom = req.body.nom;
+        var prenom = req.body.prenom;
+        var telephone = req.body.telephone;
+        var siteweb = req.body.siteweb;
+        var sexe = req.body.sexe;
+        var birthdate = req.body.birthdate;
+        var age = req.body.age;
+        var ville = req.body.ville;
+        var taille = req.body.taille;
+        var couleur = req.body.couleur;
+        var profilepicfile = req.body.profilepicfile;
+
+        connection.query("SELECT COUNT(*) as nbemail FROM users WHERE email = '" + email + "'", function (err, rows, fields) {
+            if (!err) {
+                if (rows[0].nbemail != email) {
+                    connection.query("UPDATE users SET email = '" + email + "', nom = '" + nom + "', prenom = '" + prenom + "', tel = '" + telephone + "', website = '" + siteweb + "', birthdate = '" + birthdate + "', ville = '" + ville + "', taille = '" + taille + "', couleur = '" + couleur + "' where id = " + id, function (err, rows, fields) {
+                        if (!err) {
+                            res.render('message', { messageError: "Votre compte à bien été modifier.", messageTitle: "Succès" });
+                            session.nom = nom;
+                            session.prenom = prenom;
+                            session.tel = telephone;
+                            session.siteweb = siteweb;
+                            session.sexe = sexe;
+                            session.birthdate = birthdate;
+                            session.age = age;
+                            session.ville = ville;
+                            session.taille = taille;
+                            session.couleur = couleur;
+                        }
+                        else 
+                            res.render('message', { messageError: "Impossible de modifier votre compte pour le moment. Veuillez re-essayer plus tard.", messageTitle: "Oops, une erreur est survenue" });
+
+                    });
+                }
+                else
+                    res.render('message', { messageError: "L'adresse email saisie est déjà utilisé.", messageTitle: "Oops, une erreur est survenue" });
+            }
+        });
+
+    }
+});
+
+app.get('/logout', function (req, res) {
+
+    if (session.open) {
+        session.open = false;
+        res.redirect('/login');
+    }
+});
+
 
 //enregistre une personne dans la base de données
 app.post('/register', function (req, res) {
@@ -143,6 +201,7 @@ app.post('/register', function (req, res) {
         if (!err) {
             logger.info(rows);
             res.redirect('/profile');
+            session.open = true;
         }
         else {
             logger.error(err);
